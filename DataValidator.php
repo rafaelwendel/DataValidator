@@ -7,5 +7,8 @@
 class Data_Validator {
  
     
+    public function is_email(){
+        
+    }
     
 }
