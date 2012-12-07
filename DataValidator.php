@@ -222,11 +222,8 @@ class Data_Validator {
     
     public function get_errors($param = false){
         if ($param){
-            if(isset($this->_errors['msg_' . $param])){
-                return $this->_errors['msg_' . $param];
-            }
-            elseif (isset($this->_errors[$param])){
-                return $this->_errors[$param];
+            if(isset($this->_errors[$this->_pattern['prefix'] . $param . $this->_pattern['sufix']])){
+                return $this->_errors[$this->_pattern['prefix'] . $param . $this->_pattern['sufix']];
             }
             else{
                 return false;
