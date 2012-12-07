@@ -39,7 +39,8 @@ class Data_Validator {
             'is_string'      => 'O valor %s não é String ',
             'is_boolean'     => 'O valor %s não é booleano ',
             'is_identical'   => 'O valor do campo %s deve ser idêntico à %s ',
-            'is_cpf'         => 'O valor %s não é um CPF válido '
+            'is_cpf'         => 'O valor %s não é um CPF válido ',
+            'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] '
         );
     }
     
@@ -213,6 +214,22 @@ class Data_Validator {
             $this->set_error(sprintf($this->_messages['is_cpf'], $this->_data['value']));
         }
         
+        return $this;
+    }
+    
+    public function contains($values, $separator = false){
+        if(!is_array($values)){
+            if(!$separator || is_null($values)){
+                $values = array();
+            }
+            else{
+                $values = explode($separator, $values);
+            }            
+        }
+        
+        if(!in_array($this->_data['value'], $values)){
+            $this->set_error(sprintf($this->_messages['contains'], $this->_data['name'], implode(', ', $values)));
+        }
         return $this;
     }
     
