@@ -38,6 +38,7 @@ class Data_Validator {
             'is_float'       => 'O valor %s não é float ',
             'is_string'      => 'O valor %s não é String ',
             'is_boolean'     => 'O valor %s não é booleano ',
+            'is_obj'         => 'A variável %s não é um objeto ',
             'is_identical'   => 'O valor do campo %s deve ser idêntico à %s ',
             'is_cpf'         => 'O valor %s não é um CPF válido ',
             'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] '
@@ -178,6 +179,13 @@ class Data_Validator {
     public function is_boolean(){
         if(!is_bool($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_boolean'], $this->_data['value']));
+        }
+        return $this;
+    }
+    
+    public function is_obj(){
+        if(!is_object($this->_data['value'])){
+            $this->set_error(sprintf($this->_messages['is_obj'], $this->_data['name']));
         }
         return $this;
     }
