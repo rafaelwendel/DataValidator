@@ -4,6 +4,7 @@
  *
  * @author Rafael Wendel Pinheiro (http://www.rafaelwendel.com)
  * @version 1.0
+ * @link https://github.com/rafaelwendel/DataValidator/
  */
 class Data_Validator {
     
