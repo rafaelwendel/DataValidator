@@ -1,8 +1,9 @@
 <?php
 /**
- * Description of DataValidator
+ * Class for validation of data
  *
- * @author Rafael Wendel Pinheiro
+ * @author Rafael Wendel Pinheiro (http://www.rafaelwendel.com)
+ * @version 1.0
  */
 class Data_Validator {
     
@@ -11,17 +12,36 @@ class Data_Validator {
     protected $_pattern  = array();
     protected $_messages = array();
     
+    /**
+     * Construct method (Set the error messages default)
+     * @access public
+     * @return void
+     */
     public function __construct() {
         $this->set_messages_default();
     }
     
+    
+    /**
+     * Set a data for validate
+     * @access public
+     * @param $name String The name of data
+     * @param $value Mixed The value of data
+     * @return Data_Validator The self instance
+     */
     public function set($name, $value){
         $this->_data['name'] = $name;
         $this->_data['value'] = $value;
         return $this;
     }
     
-    public function set_messages_default(){
+    
+    /**
+     * Set error messages default born in the class
+     * @access protected
+     * @return void
+     */
+    protected function set_messages_default(){
         $this->_messages = array(
             'is_required'    => 'O campo %s é obrigatório',
             'min_length'     => 'O campo %s deve conter ao mínimo %s caracter(es)',
@@ -47,12 +67,27 @@ class Data_Validator {
         );
     }
     
+    
+    /**
+     * Define a custom error message for some method
+     * @access public
+     * @param String $name The name of the method
+     * @param String $value The custom message
+     * @return void
+     */
     public function set_message($name, $value){
         if (array_key_exists($name, $this->_messages)){
             $this->_messages[$name] = $value;
         }
     }
     
+    
+    /**
+     * Get the error messages
+     * @access public
+     * @param String $param [optional] A specific method
+     * @return Mixed One array with all error messages or a message of specific method
+     */
     public function get_messages($param = false){
         if ($param){
             return $this->_messages[$param];
@@ -60,15 +95,35 @@ class Data_Validator {
         return $this->_messages;
     }
     
+    
+    /**
+     * Define the pattern of name of error messages
+     * @access public
+     * @param String $prefix [optional] The prefix of name
+     * @param String $sufix [optional] The sufix of name
+     * @return void
+     */
     public function define_pattern($prefix = '', $sufix = ''){
         $this->_pattern['prefix'] = $prefix;
         $this->_pattern['sufix']  = $sufix;
     }
     
-    public function set_error($error){
+    
+    /**
+     * Set a error of the invalid data
+     * @access protected
+     * @param String $error The error message
+     * @return void
+     */
+    protected function set_error($error){
         $this->_errors[$this->_pattern['prefix'] . $this->_data['name'] . $this->_pattern['sufix']][] = $error;
     }
-    
+        
+    /**
+     * Verify if the current data is not null
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_required(){
         if (empty ($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_required'], $this->_data['name']));
@@ -76,6 +131,13 @@ class Data_Validator {
         return $this;
     } 
     
+    
+    /**
+     * Verify if the length of current value is less than the parameter
+     * @access public
+     * @param Int $length The value for compare
+     * @return Data_Validator The self instance
+     */
     public function min_length($length){
         if (strlen($this->_data['value']) < $length){
             $this->set_error(sprintf($this->_messages['min_length'], $this->_data['name'], $length));
@@ -83,6 +145,13 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the length of current value is more than the parameter
+     * @access public
+     * @param Int $length The value for compare
+     * @return Data_Validator The self instance
+     */
     public function max_length($length){
         if (strlen($this->_data['value']) > $length){
             $this->set_error(sprintf($this->_messages['max_length'], $this->_data['name'], $length));
@@ -90,6 +159,14 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the length current value is between than the parameters
+     * @access public
+     * @param Int $min The minimum value for compare
+     * @param Int $max The maximum value for compare
+     * @return Data_Validator The self instance
+     */
     public function between_length($min, $max){
         if(strlen($this->_data['value']) < $min || strlen($this->_data['value']) > $max){
             $this->set_error(sprintf($this->_messages['between_legth'], $this->_data['name'], $min, $max));
@@ -97,6 +174,13 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current value is less than the parameter
+     * @access public
+     * @param Int $value The value for compare
+     * @return Data_Validator The self instance
+     */
     public function min_value($value){
         if (!is_numeric($this->_data['value']) || $this->_data['value'] < $value){
             $this->set_error(sprintf($this->_messages['min_value'], $this->_data['name'], $value));
@@ -104,6 +188,13 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current value is more than the parameter
+     * @access public
+     * @param Int $value The value for compare
+     * @return Data_Validator The self instance
+     */
     public function max_value($value){
         if (!is_numeric($this->_data['value']) || $this->_data['value'] > $value){
             $this->set_error(sprintf($this->_messages['max_value'], $this->_data['name'], $value));
@@ -111,6 +202,14 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the length of current value is more than the parameter
+     * @access public
+     * @param Int $min_value The minimum value for compare
+     * @param Int $max_value The maximum value for compare
+     * @return Data_Validator The self instance
+     */
     public function between_values($min_value, $max_value){
         if(!is_numeric($this->_data['value']) || ($this->_data['value'] < $min_value && $this->_data['value'] > $max_value )){
             $this->set_error(sprintf($this->_messages['between_values'], $this->_data['name'], $min_value, $max_value));
@@ -118,6 +217,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a valid email
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_email(){
         if (filter_var($this->_data['value'], FILTER_VALIDATE_EMAIL) === FALSE) {
             $this->set_error(sprintf($this->_messages['is_email'], $this->_data['value']));
@@ -125,6 +230,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a valid URL
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_url(){
         if (filter_var($this->_data['value'], FILTER_VALIDATE_URL) === FALSE) {
             $this->set_error(sprintf($this->_messages['is_url'], $this->_data['value']));
@@ -132,6 +243,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a slug
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_slug(){
         $verify = true;
         
@@ -150,6 +267,12 @@ class Data_Validator {
         return $this;        
     }
     
+    
+    /**
+     * Verify if the current data is a numeric value
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_num(){
         if (!is_numeric($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_num'], $this->_data['value']));
@@ -157,6 +280,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a integer value
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_integer(){
         if (!is_numeric($this->_data['value']) && (int) $this->_data['value'] != $this->_data['value']){
             $this->set_error(sprintf($this->_messages['is_integer'], $this->_data['value']));
@@ -164,6 +293,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a float value
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_float(){
         if (!is_float(filter_var($this->_data['value'], FILTER_VALIDATE_FLOAT))){
             $this->set_error(sprintf($this->_messages['is_float'], $this->_data['value']));
@@ -171,6 +306,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a string value
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_string(){
         if(!is_string($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_string'], $this->_data['value']));
@@ -178,6 +319,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a boolean value
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_boolean(){
         if(!is_bool($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_boolean'], $this->_data['value']));
@@ -185,6 +332,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a object
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_obj(){
         if(!is_object($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_obj'], $this->_data['name']));
@@ -192,6 +345,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a array
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_arr(){
         if(!is_array($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_arr'], $this->_data['name']));
@@ -199,6 +358,13 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is identical than the parameter
+     * @access public
+     * @param String $value The value for compare
+     * @return Data_Validator The self instance
+     */
     public function is_identical($value){
         if($this->_data['value'] !== $value){
             $this->set_error(sprintf($this->_messages['is_identical'], $this->_data['name'], $value));
@@ -206,6 +372,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a valid CPF
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_cpf(){
         $verify = true;
         
@@ -234,6 +406,12 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data is a valid CNPJ
+     * @access public
+     * @return Data_Validator The self instance
+     */
     public function is_cnpj(){
         $verify = true;
         
@@ -259,6 +437,14 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Verify if the current data contains in the parameter
+     * @access public
+     * @param Mixed $values One array or String with valids values
+     * @param String $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @return Data_Validator The self instance
+     */
     public function contains($values, $separator = false){
         if(!is_array($values)){
             if(!$separator || is_null($values)){
@@ -275,10 +461,22 @@ class Data_Validator {
         return $this;
     }
     
+    
+    /**
+     * Validate the data
+     * @access public
+     * @return bool The validation of data 
+     */
     public function validate(){
         return (count($this->_errors) > 0 ? false : true);
     }
     
+    
+    /**
+     * The messages of invalid data
+     * @param String $param [optional] A specific error
+     * @return Mixed One array with messages or a message of specific error 
+     */
     public function get_errors($param = false){
         if ($param){
             if(isset($this->_errors[$this->_pattern['prefix'] . $param . $this->_pattern['sufix']])){
