@@ -42,6 +42,7 @@ class Data_Validator {
             'is_arr'         => 'A variável %s não é um array ',
             'is_identical'   => 'O valor do campo %s deve ser idêntico à %s ',
             'is_cpf'         => 'O valor %s não é um CPF válido ',
+            'is_cnpj'        => 'O valor %s não é um CNPJ válido ',
             'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] '
         );
     }
@@ -228,6 +229,31 @@ class Data_Validator {
         
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_cpf'], $this->_data['value']));
+        }
+        
+        return $this;
+    }
+    
+    public function is_cnpj(){
+        $verify = true;
+        
+        $c = preg_replace('/\D/', '', $input);
+        $b = array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
+        
+        if (strlen($c) != 14) 
+            $verify = false;
+        for ($i = 0, $n = 0; $i < 12; $n += $c[$i] * $b[++$i]);
+        
+        if ($c[12] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+            $verify = false;
+        
+        for ($i = 0, $n = 0; $i <= 12; $n += $c[$i] * $b[$i++]);
+        
+        if ($c[13] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+            $verify = false;
+        
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_cnpj'], $this->_data['value']));
         }
         
         return $this;
