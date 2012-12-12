@@ -72,6 +72,15 @@ class Data_Validator {
     
     
     /**
+     * The number of validators methods available in DataValidator
+     * @access public
+     * @return int Number of validators methods
+     */
+    public function get_number_validators_methods(){
+        return count($this->_messages);
+    }
+    
+    /**
      * Define a custom error message for some method
      * @access public
      * @param String $name The name of the method
