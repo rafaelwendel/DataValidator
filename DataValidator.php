@@ -61,10 +61,12 @@ class Data_Validator {
             'is_boolean'     => 'O valor %s não é booleano ',
             'is_obj'         => 'A variável %s não é um objeto ',
             'is_arr'         => 'A variável %s não é um array ',
-            'is_identical'   => 'O valor do campo %s deve ser idêntico à %s ',
+            'is_equals'      => 'O valor do campo %s deve ser igual à %s ',
+            'is_not_equals'  => 'O valor do campo %s não deve ser igual à %s ',
             'is_cpf'         => 'O valor %s não é um CPF válido ',
             'is_cnpj'        => 'O valor %s não é um CNPJ válido ',
-            'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] '
+            'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] ',
+            'not_contains'   => 'O campo %s não aceita o(s) seguinte(s) valore(s): [%s] ',
         );
     }
     
@@ -369,14 +371,32 @@ class Data_Validator {
     
     
     /**
-     * Verify if the current data is identical than the parameter
+     * Verify if the current data is equals than the parameter
      * @access public
      * @param String $value The value for compare
+     * @param Boolean $identical [optional] Identical?
      * @return Data_Validator The self instance
      */
-    public function is_identical($value){
-        if($this->_data['value'] !== $value){
-            $this->set_error(sprintf($this->_messages['is_identical'], $this->_data['name'], $value));
+    public function is_equals($value, $identical = false){
+        $verify = ($identical === true ? $this->_data['value'] === $value : strtolower($this->_data['value']) == strtolower($value));
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_equals'], $this->_data['name'], $value));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is not equals than the parameter
+     * @access public
+     * @param String $value The value for compare
+     * @param Boolean $identical [optional] Identical?
+     * @return Data_Validator The self instance
+     */
+    public function is_not_equals($value, $identical = false){
+        $verify = ($identical === true ? $this->_data['value'] !== $value : strtolower($this->_data['value']) != strtolower($value));
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_not_equals'], $this->_data['name'], $value));
         }
         return $this;
     }
@@ -466,6 +486,30 @@ class Data_Validator {
         
         if(!in_array($this->_data['value'], $values)){
             $this->set_error(sprintf($this->_messages['contains'], $this->_data['name'], implode(', ', $values)));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data not contains in the parameter
+     * @access public
+     * @param Mixed $values One array or String with valids values
+     * @param String $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @return Data_Validator The self instance
+     */
+    public function not_contains($values, $separator = false){
+        if(!is_array($values)){
+            if(!$separator || is_null($values)){
+                $values = array();
+            }
+            else{
+                $values = explode($separator, $values);
+            }            
+        }
+        
+        if(in_array($this->_data['value'], $values)){
+            $this->set_error(sprintf($this->_messages['not_contains'], $this->_data['name'], implode(', ', $values)));
         }
         return $this;
     }
