@@ -137,10 +137,12 @@ class Data_Validator {
      * Verify if the length of current value is less than the parameter
      * @access public
      * @param Int $length The value for compare
+     * @param Boolean $inclusive [optional] Include the lenght in the comparison
      * @return Data_Validator The self instance
      */
-    public function min_length($length){
-        if (strlen($this->_data['value']) < $length){
+    public function min_length($length, $inclusive = false){
+        $verify = ($inclusive === true ? strlen($this->_data['value']) <= $length : strlen($this->_data['value']) < $length);
+        if (!$verify){
             $this->set_error(sprintf($this->_messages['min_length'], $this->_data['name'], $length));
         }
         return $this;
@@ -151,10 +153,12 @@ class Data_Validator {
      * Verify if the length of current value is more than the parameter
      * @access public
      * @param Int $length The value for compare
+     * @param Boolean $inclusive [optional] Include the lenght in the comparison
      * @return Data_Validator The self instance
      */
-    public function max_length($length){
-        if (strlen($this->_data['value']) > $length){
+    public function max_length($length, $inclusive = false){
+        $verify = ($inclusive === true ? strlen($this->_data['value']) >= $length : strlen($this->_data['value']) > $length);
+        if (!$verify){
             $this->set_error(sprintf($this->_messages['max_length'], $this->_data['name'], $length));
         }
         return $this;
@@ -180,10 +184,12 @@ class Data_Validator {
      * Verify if the current value is less than the parameter
      * @access public
      * @param Int $value The value for compare
+     * @param Boolean $inclusive [optional] Include the value in the comparison
      * @return Data_Validator The self instance
      */
-    public function min_value($value){
-        if (!is_numeric($this->_data['value']) || $this->_data['value'] < $value){
+    public function min_value($value, $inclusive = false){
+        $verify = ($inclusive === true ? is_numeric($this->_data['value']) || $this->_data['value'] <= $value : is_numeric($this->_data['value']) || $this->_data['value'] < $value);
+        if (!$verify){
             $this->set_error(sprintf($this->_messages['min_value'], $this->_data['name'], $value));
         }
         return $this;
@@ -194,10 +200,12 @@ class Data_Validator {
      * Verify if the current value is more than the parameter
      * @access public
      * @param Int $value The value for compare
+     * @param Boolean $inclusive [optional] Include the value in the comparison
      * @return Data_Validator The self instance
      */
-    public function max_value($value){
-        if (!is_numeric($this->_data['value']) || $this->_data['value'] > $value){
+    public function max_value($value, $inclusive = false){
+        $verify = ($inclusive === true ? is_numeric($this->_data['value']) || $this->_data['value'] >= $value : is_numeric($this->_data['value']) || $this->_data['value'] > $value);
+        if (!$verify){
             $this->set_error(sprintf($this->_messages['max_value'], $this->_data['name'], $value));
         }
         return $this;
