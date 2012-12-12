@@ -141,7 +141,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function min_length($length, $inclusive = false){
-        $verify = ($inclusive === true ? strlen($this->_data['value']) <= $length : strlen($this->_data['value']) < $length);
+        $verify = ($inclusive === true ? strlen($this->_data['value']) >= $length : strlen($this->_data['value']) > $length);
         if (!$verify){
             $this->set_error(sprintf($this->_messages['min_length'], $this->_data['name'], $length));
         }
@@ -157,7 +157,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function max_length($length, $inclusive = false){
-        $verify = ($inclusive === true ? strlen($this->_data['value']) >= $length : strlen($this->_data['value']) > $length);
+        $verify = ($inclusive === true ? strlen($this->_data['value']) <= $length : strlen($this->_data['value']) < $length);
         if (!$verify){
             $this->set_error(sprintf($this->_messages['max_length'], $this->_data['name'], $length));
         }
@@ -188,7 +188,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function min_value($value, $inclusive = false){
-        $verify = ($inclusive === true ? is_numeric($this->_data['value']) || $this->_data['value'] <= $value : is_numeric($this->_data['value']) || $this->_data['value'] < $value);
+        $verify = ($inclusive === true ? !is_numeric($this->_data['value']) || $this->_data['value'] >= $value : !is_numeric($this->_data['value']) || $this->_data['value'] > $value);
         if (!$verify){
             $this->set_error(sprintf($this->_messages['min_value'], $this->_data['name'], $value));
         }
@@ -204,7 +204,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function max_value($value, $inclusive = false){
-        $verify = ($inclusive === true ? is_numeric($this->_data['value']) || $this->_data['value'] >= $value : is_numeric($this->_data['value']) || $this->_data['value'] > $value);
+        $verify = ($inclusive === true ? !is_numeric($this->_data['value']) || $this->_data['value'] <= $value : !is_numeric($this->_data['value']) || $this->_data['value'] < $value);
         if (!$verify){
             $this->set_error(sprintf($this->_messages['max_value'], $this->_data['name'], $value));
         }
