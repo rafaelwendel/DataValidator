@@ -174,7 +174,7 @@ class Data_Validator {
      */
     public function between_length($min, $max){
         if(strlen($this->_data['value']) < $min || strlen($this->_data['value']) > $max){
-            $this->set_error(sprintf($this->_messages['between_legth'], $this->_data['name'], $min, $max));
+            $this->set_error(sprintf($this->_messages['between_length'], $this->_data['name'], $min, $max));
         }
         return $this;
     }
@@ -220,7 +220,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function between_values($min_value, $max_value){
-        if(!is_numeric($this->_data['value']) || ($this->_data['value'] < $min_value && $this->_data['value'] > $max_value )){
+        if(!is_numeric($this->_data['value']) || (($this->_data['value'] < $min_value || $this->_data['value'] > $max_value ))){
             $this->set_error(sprintf($this->_messages['between_values'], $this->_data['name'], $min_value, $max_value));
         }
         return $this;
