@@ -67,6 +67,8 @@ class Data_Validator {
             'is_cnpj'        => 'O valor %s não é um CNPJ válido ',
             'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] ',
             'not_contains'   => 'O campo %s não aceita o(s) seguinte(s) valore(s): [%s] ',
+            'is_lowercase'   => 'O campo %s só aceita caracteres minúsculos ',
+            'is_uppercase'   => 'O campo %s só aceita caracteres maiúsculos '
         );
     }
     
@@ -244,7 +246,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_email(){
-        if (filter_var($this->_data['value'], FILTER_VALIDATE_EMAIL) === FALSE) {
+        if (filter_var($this->_data['value'], FILTER_VALIDATE_EMAIL) === false) {
             $this->set_error(sprintf($this->_messages['is_email'], $this->_data['value']));
         }
         return $this;
@@ -257,7 +259,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_url(){
-        if (filter_var($this->_data['value'], FILTER_VALIDATE_URL) === FALSE) {
+        if (filter_var($this->_data['value'], FILTER_VALIDATE_URL) === false) {
             $this->set_error(sprintf($this->_messages['is_url'], $this->_data['value']));
         }
         return $this;
@@ -519,6 +521,32 @@ class Data_Validator {
         
         if(in_array($this->_data['value'], $values)){
             $this->set_error(sprintf($this->_messages['not_contains'], $this->_data['name'], implode(', ', $values)));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is loweracase
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_lowercase(){
+        if($this->_data['value'] !== mb_strtolower($this->_data['value'], mb_detect_encoding($this->_data['value']))){
+            $this->set_error(sprintf($this->_messages['is_lowercase'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is uppercase
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_uppercase(){
+        if($this->_data['value'] !== mb_strtoupper($this->_data['value'], mb_detect_encoding($this->_data['value']))){
+            $this->set_error(sprintf($this->_messages['is_uppercase'], $this->_data['name']));
         }
         return $this;
     }
