@@ -72,7 +72,8 @@ class Data_Validator {
             'is_multiple'    => 'O valor %s não é múltiplo de %s',
             'is_positive'    => 'O campo %s só aceita valores positivos',
             'is_negative'    => 'O campo %s só aceita valores negativos',
-            'is_date'        => 'A data %s não é válida'
+            'is_date'        => 'A data %s não é válida',
+            'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos'
         );
     }
     
@@ -486,7 +487,7 @@ class Data_Validator {
      * Verify if the current data contains in the parameter
      * @access public
      * @param Mixed $values One array or String with valids values
-     * @param Mixed $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @param Mixed $separator [optional] If $values as a String, pass the separator of values (ex: , - | )
      * @return Data_Validator The self instance
      */
     public function contains($values, $separator = false){
@@ -510,7 +511,7 @@ class Data_Validator {
      * Verify if the current data not contains in the parameter
      * @access public
      * @param Mixed $values One array or String with valids values
-     * @param Mixed $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @param Mixed $separator [optional] If $values as a String, pass the separator of values (ex: , - | )
      * @return Data_Validator The self instance
      */
     public function not_contains($values, $separator = false){
@@ -579,7 +580,7 @@ class Data_Validator {
     /**
      * Verify if the current data is a positive number
      * @access public
-     * @param Boolean $inclusive Include 0 in comparison?
+     * @param Boolean $inclusive [optional] Include 0 in comparison?
      * @return Data_Validator The self instance
      */
     public function is_positive($inclusive = false){
@@ -594,7 +595,7 @@ class Data_Validator {
     /**
      * Verify if the current data is a negative number
      * @access public
-     * @param Boolean $inclusive Include 0 in comparison?
+     * @param Boolean $inclusive [optional] Include 0 in comparison?
      * @return Data_Validator The self instance
      */
     public function is_negative($inclusive = false){
@@ -609,7 +610,7 @@ class Data_Validator {
     /**
      * Verify if the current data is a valid Date
      * @access public
-     * @param String $format The Date format
+     * @param String $format [optional] The Date format
      * @return Data_Validator The self instance
      */
     public function is_date($format = null){
@@ -627,11 +628,31 @@ class Data_Validator {
             }
         }
         if($verify){
-            $dateFromFormat = DateTime::createFromFormat($format, $this->_data['value']);
-            $verify = $dateFromFormat && $this->_data['value'] === date($format, $dateFromFormat->getTimestamp());
+            $date_from_format = DateTime::createFromFormat($format, $this->_data['value']);
+            $verify = $date_from_format && $this->_data['value'] === date($format, $date_from_format->getTimestamp());
         }        
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_date'], $this->_data['value']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data contains just alpha caracters
+     * @access public
+     * @param String $additional [optional] The extra caracters
+     * @return Data_Validator The self instance
+     */
+    public function is_alpha($additional = ''){
+        $string_format = '/^(\s|[a-zA-Z])*$/';
+        
+        $this->_data['value'] = (string) $this->_data['value'];
+        $clean_input = str_replace(str_split($additional), '', $this->_data['value']);
+        
+        $verify = ($clean_input !== $this->_data['value'] && $clean_input === '') || preg_match($string_format, $clean_input);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_alpha'], $this->_data['name']));
         }
         return $this;
     }
