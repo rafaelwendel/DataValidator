@@ -69,7 +69,9 @@ class Data_Validator {
             'not_contains'   => 'O campo %s não aceita o(s) seguinte(s) valore(s): [%s] ',
             'is_lowercase'   => 'O campo %s só aceita caracteres minúsculos ',
             'is_uppercase'   => 'O campo %s só aceita caracteres maiúsculos ',
-            'is_multiple'    => 'O valor %s não é múltiplo de %s'
+            'is_multiple'    => 'O valor %s não é múltiplo de %s',
+            'is_positive'    => 'O campo %s só aceita valores positivos',
+            'is_negative'    => 'O campo %s só aceita valores negativos',
         );
     }
     
@@ -483,7 +485,7 @@ class Data_Validator {
      * Verify if the current data contains in the parameter
      * @access public
      * @param Mixed $values One array or String with valids values
-     * @param String $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @param Mixed $separator If $values as a String, pass the separator of values (ex: , - | )
      * @return Data_Validator The self instance
      */
     public function contains($values, $separator = false){
@@ -507,7 +509,7 @@ class Data_Validator {
      * Verify if the current data not contains in the parameter
      * @access public
      * @param Mixed $values One array or String with valids values
-     * @param String $separator If $values as a String, pass the separator of values (ex: , - | )
+     * @param Mixed $separator If $values as a String, pass the separator of values (ex: , - | )
      * @return Data_Validator The self instance
      */
     public function not_contains($values, $separator = false){
@@ -556,6 +558,7 @@ class Data_Validator {
     /**
      * Verify if the current data is multiple of the parameter
      * @access public
+     * @param Int $value The value for comparison
      * @return Data_Validator The self instance
      */
     public function is_multiple($value){
@@ -567,6 +570,36 @@ class Data_Validator {
         }
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_multiple'], $this->_data['value'], $value));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is a positive number
+     * @access public
+     * @param Boolean $inclusive Include 0 in comparison?
+     * @return Data_Validator The self instance
+     */
+    public function is_positive($inclusive = false){
+        $verify = ($inclusive === true ? ($this->_data['value'] >= 0) : ($this->_data['value'] > 0));
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_positive'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is a negative number
+     * @access public
+     * @param Boolean $inclusive Include 0 in comparison?
+     * @return Data_Validator The self instance
+     */
+    public function is_negative($inclusive = false){
+        $verify = ($inclusive === true ? ($this->_data['value'] <= 0) : ($this->_data['value'] < 0));
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_negative'], $this->_data['name']));
         }
         return $this;
     }
