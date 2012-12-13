@@ -73,7 +73,8 @@ class Data_Validator {
             'is_positive'    => 'O campo %s só aceita valores positivos',
             'is_negative'    => 'O campo %s só aceita valores negativos',
             'is_date'        => 'A data %s não é válida',
-            'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos'
+            'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos',
+            'is_alpha_num'   => 'O campo %s só aceita caracteres alfanuméricos'
         );
     }
     
@@ -640,19 +641,43 @@ class Data_Validator {
     
     /**
      * Verify if the current data contains just alpha caracters
+     * @access protected
+     * @param String $string_format The regex
+     * @param String $additional [optional] The extra caracters
+     * @return Boolean True if data is valid or false otherwise
+     */
+    protected function generic_alpha_num($string_format, $additional = ''){
+        $this->_data['value'] = (string) $this->_data['value'];
+        $clean_input = str_replace(str_split($additional), '', $this->_data['value']);
+        return ($clean_input !== $this->_data['value'] && $clean_input === '') || preg_match($string_format, $clean_input);
+    }
+    
+    
+    /**
+     * Verify if the current data contains just alpha caracters
      * @access public
      * @param String $additional [optional] The extra caracters
      * @return Data_Validator The self instance
      */
     public function is_alpha($additional = ''){
-        $string_format = '/^(\s|[a-zA-Z])*$/';
-        
-        $this->_data['value'] = (string) $this->_data['value'];
-        $clean_input = str_replace(str_split($additional), '', $this->_data['value']);
-        
-        $verify = ($clean_input !== $this->_data['value'] && $clean_input === '') || preg_match($string_format, $clean_input);
-        if(!$verify){
+        $string_format = '/^(\s|[a-zA-Z])*$/';       
+        if(!$this->generic_alpha_num($string_format, $additional)){
             $this->set_error(sprintf($this->_messages['is_alpha'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data contains just alpha-numerics caracters
+     * @access public
+     * @param String $additional [optional] The extra caracters
+     * @return Data_Validator The self instance
+     */
+    public function is_alpha_num($additional = ''){
+        $string_format = '/^(\s|[a-zA-Z0-9])*$/';  
+        if(!$this->generic_alpha_num($string_format, $additional)){
+            $this->set_error(sprintf($this->_messages['is_alpha_num'], $this->_data['name']));
         }
         return $this;
     }
