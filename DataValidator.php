@@ -72,6 +72,7 @@ class Data_Validator {
             'is_multiple'    => 'O valor %s não é múltiplo de %s',
             'is_positive'    => 'O campo %s só aceita valores positivos',
             'is_negative'    => 'O campo %s só aceita valores negativos',
+            'is_date'        => 'A data %s não é válida'
         );
     }
     
@@ -600,6 +601,37 @@ class Data_Validator {
         $verify = ($inclusive === true ? ($this->_data['value'] <= 0) : ($this->_data['value'] < 0));
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_negative'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is a valid Date
+     * @access public
+     * @param String $format The Date format
+     * @return Data_Validator The self instance
+     */
+    public function is_date($format = null){
+        $verify = true;
+        if($this->_data['value'] instanceof DateTime){
+            return $this;
+        }
+        elseif(!is_string($this->_data['value'])){
+            $verify = false;
+        }
+        elseif (is_null($format)){
+            $verify = (strtotime($this->_data['value']) !== false);
+            if($verify){
+                return $this;
+            }
+        }
+        if($verify){
+            $dateFromFormat = DateTime::createFromFormat($format, $this->_data['value']);
+            $verify = $dateFromFormat && $this->_data['value'] === date($format, $dateFromFormat->getTimestamp());
+        }        
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_date'], $this->_data['value']));
         }
         return $this;
     }
