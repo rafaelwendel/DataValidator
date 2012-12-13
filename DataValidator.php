@@ -68,7 +68,8 @@ class Data_Validator {
             'contains'       => 'O campo %s só aceita um do(s) seguinte(s) valore(s): [%s] ',
             'not_contains'   => 'O campo %s não aceita o(s) seguinte(s) valore(s): [%s] ',
             'is_lowercase'   => 'O campo %s só aceita caracteres minúsculos ',
-            'is_uppercase'   => 'O campo %s só aceita caracteres maiúsculos '
+            'is_uppercase'   => 'O campo %s só aceita caracteres maiúsculos ',
+            'is_multiple'    => 'O valor %s não é múltiplo de %s'
         );
     }
     
@@ -547,6 +548,25 @@ class Data_Validator {
     public function is_uppercase(){
         if($this->_data['value'] !== mb_strtoupper($this->_data['value'], mb_detect_encoding($this->_data['value']))){
             $this->set_error(sprintf($this->_messages['is_uppercase'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is multiple of the parameter
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_multiple($value){
+        if($value == 0){
+            $verify = ($this->_data['value'] == 0);
+        }
+        else{
+            $verify = ($this->_data['value'] % $value == 0);
+        }
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_multiple'], $this->_data['value'], $value));
         }
         return $this;
     }
