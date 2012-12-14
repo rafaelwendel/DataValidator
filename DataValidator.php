@@ -74,7 +74,8 @@ class Data_Validator {
             'is_negative'    => 'O campo %s só aceita valores negativos',
             'is_date'        => 'A data %s não é válida',
             'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos',
-            'is_alpha_num'   => 'O campo %s só aceita caracteres alfanuméricos'
+            'is_alpha_num'   => 'O campo %s só aceita caracteres alfanuméricos',
+            'no_whitespaces' => 'O campo %s não aceita espaços em branco'
         );
     }
     
@@ -678,6 +679,20 @@ class Data_Validator {
         $string_format = '/^(\s|[a-zA-Z0-9])*$/';  
         if(!$this->generic_alpha_num($string_format, $additional)){
             $this->set_error(sprintf($this->_messages['is_alpha_num'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data no contains white spaces
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function no_whitespaces(){
+        $verify = is_null($this->_data['value']) || preg_match('#^\S+$#', $this->_data['value']);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['no_whitespaces'], $this->_data['name']));
         }
         return $this;
     }
