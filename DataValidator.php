@@ -20,6 +20,7 @@ class Data_Validator {
      */
     public function __construct() {
         $this->set_messages_default();
+        $this->define_pattern();
     }
     
     
