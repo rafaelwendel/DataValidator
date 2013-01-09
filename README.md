@@ -18,6 +18,7 @@ Guia de Utilização
 ### Inclusão
 
 Basta incluir a classe e criar uma instância para utilizá-la.
+    
     <?php
         include 'DataValidator.php';
         $validate = new Data_Validator();
@@ -115,35 +116,35 @@ Você pode definir um `pattern` para o índice. Assim é possível definir um pr
 
 Segue lista de métodos validadores disponíveis na classe DataValidator.
 
-    * is_required
-    * min_length
-    * max_length
-    * between_length
-    * min_value
-    * max_value
-    * between_values
-    * is_email
-    * is_url
-    * is_slug
-    * is_num
-    * is_integer
-    * is_float
-    * is_string
-    * is_boolean
-    * is_obj
-    * is_arr
-    * is_equals
-    * is_not_equals
-    * is_cpf
-    * is_cnpj
-    * contains
-    * not_contains
-    * is_lowercase
-    * is_uppercase
-    * is_multiple
-    * is_positive
-    * is_negative
-    * is_date
-    * is_alpha
-    * is_alpha_num
-    * no_whitespaces
+* is_required
+* min_length
+* max_length
+* between_length
+* min_value
+* max_value
+* between_values
+* is_email
+* is_url
+* is_slug
+* is_num
+* is_integer
+* is_float
+* is_string
+* is_boolean
+* is_obj
+* is_arr
+* is_equals
+* is_not_equals
+* is_cpf
+* is_cnpj
+* contains
+* not_contains
+* is_lowercase
+* is_uppercase
+* is_multiple
+* is_positive
+* is_negative
+* is_date
+* is_alpha
+* is_alpha_num
+* no_whitespaces
