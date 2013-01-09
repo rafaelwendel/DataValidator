@@ -54,6 +54,7 @@ A verificação das validações pode ser feita através da execução do métod
 ### Capturando os erros
 
 Os erros podem ser capturados através da chamada `get_errors()`. Para capturar o(s) erro(s) de um campo específico, basta informar o nome do campo no parâmetro `get_erros($param)`
+    
     $validate->set('nome', 'Aa')->min_length(5);
     if ($validate->validate()){
         echo 'Tudo certo';
@@ -67,6 +68,7 @@ Os erros podem ser capturados através da chamada `get_errors()`. Para capturar 
     }
 
 O método `get_errors()` retorna um array encadeado onde o índice é o nome do campo validado e cada posição é um array com cada erro do campo. Ex: Os erros do campo 'nome' e 'email'
+    
     $validate->set('nome', '')->is_required()->min_length(5)
              ->set('email', 'something')->is_email();
     print_r($validate->get_errors());
@@ -89,6 +91,7 @@ O método `get_errors()` retorna um array encadeado onde o índice é o nome do 
     */
 
 Você pode definir um `pattern` para o índice. Assim é possível definir um prefixo e/ou sufixo padrão para os índices do array de erros
+    
     //define_pattern($prefix = '', $sufix = '');    
     $validate->define_pattern('erro_');
     $validate->set('nome', '')->is_required()->min_length(5)
