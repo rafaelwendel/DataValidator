@@ -151,3 +151,7 @@ Segue lista de métodos validadores disponíveis na classe DataValidator.
 * is_alpha
 * is_alpha_num
 * no_whitespaces
+
+Se quiser saber o número de métodos validadores disponíveis, execute o método ´get_number_validators_methods()´
+
+    echo 'Número de métodos disponíveis: ' . $validate->get_number_validators_methods();
