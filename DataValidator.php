@@ -61,6 +61,7 @@ class Data_Validator {
             'is_string'      => 'O valor %s não é String ',
             'is_boolean'     => 'O valor %s não é booleano ',
             'is_obj'         => 'A variável %s não é um objeto ',
+            'is_instance_of' => '%s não é uma instância de %s ',
             'is_arr'         => 'A variável %s não é um array ',
             'is_directory'   => '%s não é um diretório válido ',
             'is_equals'      => 'O valor do campo %s deve ser igual à %s ',
@@ -372,6 +373,20 @@ class Data_Validator {
     public function is_obj(){
         if(!is_object($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_obj'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current data is a instance of the determinate class
+     * @access public
+     * @param String $class The class for compare
+     * @return Data_Validator The self instance
+     */
+    public function is_instance_of($class){
+        if(!($this->_data['value'] instanceof $class)){
+            $this->set_error(sprintf($this->_messages['is_instance_of'], $this->_data['name'], $class));
         }
         return $this;
     }
