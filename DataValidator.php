@@ -62,6 +62,7 @@ class Data_Validator {
             'is_boolean'     => 'O valor %s não é booleano ',
             'is_obj'         => 'A variável %s não é um objeto ',
             'is_arr'         => 'A variável %s não é um array ',
+            'is_directory'   => '%s não é um diretório válido ',
             'is_equals'      => 'O valor do campo %s deve ser igual à %s ',
             'is_not_equals'  => 'O valor do campo %s não deve ser igual à %s ',
             'is_cpf'         => 'O valor %s não é um CPF válido ',
@@ -384,6 +385,20 @@ class Data_Validator {
     public function is_arr(){
         if(!is_array($this->_data['value'])){
             $this->set_error(sprintf($this->_messages['is_arr'], $this->_data['name']));
+        }
+        return $this;
+    }
+    
+    
+    /**
+     * Verify if the current parameter it is a directory
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_directory(){
+        $verify = is_string($this->_data['value']) && is_dir($this->_data['value']);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_directory'], $this->_data['value']));
         }
         return $this;
     }
