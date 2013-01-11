@@ -135,7 +135,9 @@ Segue lista de métodos validadores disponíveis na classe DataValidator.
 * is_string
 * is_boolean
 * is_obj
+* is_instance_of
 * is_arr
+* is_directory
 * is_equals
 * is_not_equals
 * is_cpf
