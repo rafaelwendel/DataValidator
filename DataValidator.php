@@ -493,7 +493,7 @@ class Data_Validator {
     public function is_cnpj(){
         $verify = true;
         
-        $c = preg_replace('/\D/', '', $input);
+        $c = preg_replace('/\D/', '', $this->_data['value']);
         $b = array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
         
         if (strlen($c) != 14) 
