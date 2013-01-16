@@ -294,7 +294,7 @@ class Data_Validator {
             $verify = false;
         }        
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_url'], $this->_data['value']));
+            $this->set_error(sprintf($this->_messages['is_slug'], $this->_data['value']));
         }
         return $this;        
     }
