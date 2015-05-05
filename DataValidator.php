@@ -6,13 +6,15 @@
  * @version 1.0
  * @link https://github.com/rafaelwendel/DataValidator/
  */
+namespace validator;
+
 class Data_Validator {
-    
+
     protected $_data     = array();
     protected $_errors   = array();
     protected $_pattern  = array();
     protected $_messages = array();
-    
+
     /**
      * Construct method (Set the error messages default)
      * @access public
@@ -22,8 +24,8 @@ class Data_Validator {
         $this->set_messages_default();
         $this->define_pattern();
     }
-    
-    
+
+
     /**
      * Set a data for validate
      * @access public
@@ -36,8 +38,8 @@ class Data_Validator {
         $this->_data['value'] = $value;
         return $this;
     }
-    
-    
+
+
     /**
      * Set error messages default born in the class
      * @access protected
@@ -78,11 +80,15 @@ class Data_Validator {
             'is_date'        => 'A data %s não é válida',
             'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos',
             'is_alpha_num'   => 'O campo %s só aceita caracteres alfanuméricos',
-            'no_whitespaces' => 'O campo %s não aceita espaços em branco'
+            'no_whitespaces' => 'O campo %s não aceita espaços em branco',
+            'is_phone'       => 'O campo %s não é válido',
+            'is_zipCode'     => 'O campo %s não é válido',
+            'is_plate'       => 'O campo $s não é válido',
+            'is_ip'          => 'O campo $s não é um ip válido'
         );
     }
-    
-    
+
+
     /**
      * The number of validators methods available in DataValidator
      * @access public
@@ -91,7 +97,7 @@ class Data_Validator {
     public function get_number_validators_methods(){
         return count($this->_messages);
     }
-    
+
     /**
      * Define a custom error message for some method
      * @access public
@@ -104,8 +110,8 @@ class Data_Validator {
             $this->_messages[$name] = $value;
         }
     }
-    
-    
+
+
     /**
      * Get the error messages
      * @access public
@@ -118,8 +124,8 @@ class Data_Validator {
         }
         return $this->_messages;
     }
-    
-    
+
+
     /**
      * Define the pattern of name of error messages
      * @access public
@@ -131,8 +137,8 @@ class Data_Validator {
         $this->_pattern['prefix'] = $prefix;
         $this->_pattern['sufix']  = $sufix;
     }
-    
-    
+
+
     /**
      * Set a error of the invalid data
      * @access protected
@@ -142,7 +148,7 @@ class Data_Validator {
     protected function set_error($error){
         $this->_errors[$this->_pattern['prefix'] . $this->_data['name'] . $this->_pattern['sufix']][] = $error;
     }
-        
+
     /**
      * Verify if the current data is not null
      * @access public
@@ -153,9 +159,9 @@ class Data_Validator {
             $this->set_error(sprintf($this->_messages['is_required'], $this->_data['name']));
         }
         return $this;
-    } 
-    
-    
+    }
+
+
     /**
      * Verify if the length of current value is less than the parameter
      * @access public
@@ -170,8 +176,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the length of current value is more than the parameter
      * @access public
@@ -186,8 +192,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the length current value is between than the parameters
      * @access public
@@ -201,8 +207,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current value is less than the parameter
      * @access public
@@ -217,8 +223,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current value is more than the parameter
      * @access public
@@ -233,8 +239,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the length of current value is more than the parameter
      * @access public
@@ -248,8 +254,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a valid email
      * @access public
@@ -261,8 +267,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a valid URL
      * @access public
@@ -274,8 +280,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a slug
      * @access public
@@ -283,7 +289,7 @@ class Data_Validator {
      */
     public function is_slug(){
         $verify = true;
-        
+
         if (strstr($input, '--')) {
             $verify = false;
         }
@@ -292,14 +298,14 @@ class Data_Validator {
         }
         if (preg_match('@^-|-$@', $input)){
             $verify = false;
-        }        
+        }
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_slug'], $this->_data['value']));
         }
-        return $this;        
+        return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a numeric value
      * @access public
@@ -311,8 +317,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a integer value
      * @access public
@@ -324,8 +330,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a float value
      * @access public
@@ -337,8 +343,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a string value
      * @access public
@@ -350,8 +356,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a boolean value
      * @access public
@@ -363,8 +369,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a object
      * @access public
@@ -376,8 +382,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a instance of the determinate class
      * @access public
@@ -390,8 +396,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a array
      * @access public
@@ -403,8 +409,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current parameter it is a directory
      * @access public
@@ -417,8 +423,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is equals than the parameter
      * @access public
@@ -433,8 +439,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is not equals than the parameter
      * @access public
@@ -449,8 +455,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a valid CPF
      * @access public
@@ -458,33 +464,33 @@ class Data_Validator {
      */
     public function is_cpf(){
         $verify = true;
-        
+
         $c = preg_replace('/\D/', '', $this->_data['value']);
-        
-        if (strlen($c) != 11) 
+
+        if (strlen($c) != 11)
             $verify = false;
 
-        if (preg_match("/^{$c[0]}{11}$/", $c)) 
+        if (preg_match("/^{$c[0]}{11}$/", $c))
             $verify = false;
-        
+
         for ($s = 10, $n = 0, $i = 0; $s >= 2; $n += $c[$i++] * $s--);
-        
-        if ($c[9] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+
+        if ($c[9] != ((($n %= 11) < 2) ? 0 : 11 - $n))
             $verify = false;
 
         for ($s = 11, $n = 0, $i = 0; $s >= 2; $n += $c[$i++] * $s--);
 
-        if ($c[10] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+        if ($c[10] != ((($n %= 11) < 2) ? 0 : 11 - $n))
             $verify = false;
-        
+
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_cpf'], $this->_data['value']));
         }
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a valid CNPJ
      * @access public
@@ -492,30 +498,30 @@ class Data_Validator {
      */
     public function is_cnpj(){
         $verify = true;
-        
+
         $c = preg_replace('/\D/', '', $this->_data['value']);
         $b = array(6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2);
-        
-        if (strlen($c) != 14) 
+
+        if (strlen($c) != 14)
             $verify = false;
         for ($i = 0, $n = 0; $i < 12; $n += $c[$i] * $b[++$i]);
-        
-        if ($c[12] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+
+        if ($c[12] != ((($n %= 11) < 2) ? 0 : 11 - $n))
             $verify = false;
-        
+
         for ($i = 0, $n = 0; $i <= 12; $n += $c[$i] * $b[$i++]);
-        
-        if ($c[13] != ((($n %= 11) < 2) ? 0 : 11 - $n)) 
+
+        if ($c[13] != ((($n %= 11) < 2) ? 0 : 11 - $n))
             $verify = false;
-        
+
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_cnpj'], $this->_data['value']));
         }
-        
+
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data contains in the parameter
      * @access public
@@ -530,16 +536,16 @@ class Data_Validator {
             }
             else{
                 $values = explode($separator, $values);
-            }            
+            }
         }
-        
+
         if(!in_array($this->_data['value'], $values)){
             $this->set_error(sprintf($this->_messages['contains'], $this->_data['name'], implode(', ', $values)));
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data not contains in the parameter
      * @access public
@@ -554,16 +560,16 @@ class Data_Validator {
             }
             else{
                 $values = explode($separator, $values);
-            }            
+            }
         }
-        
+
         if(in_array($this->_data['value'], $values)){
             $this->set_error(sprintf($this->_messages['not_contains'], $this->_data['name'], implode(', ', $values)));
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is loweracase
      * @access public
@@ -575,8 +581,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is uppercase
      * @access public
@@ -588,8 +594,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is multiple of the parameter
      * @access public
@@ -608,8 +614,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a positive number
      * @access public
@@ -623,8 +629,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a negative number
      * @access public
@@ -638,8 +644,8 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data is a valid Date
      * @access public
@@ -663,14 +669,14 @@ class Data_Validator {
         if($verify){
             $date_from_format = DateTime::createFromFormat($format, $this->_data['value']);
             $verify = $date_from_format && $this->_data['value'] === date($format, $date_from_format->getTimestamp());
-        }        
+        }
         if(!$verify){
             $this->set_error(sprintf($this->_messages['is_date'], $this->_data['value']));
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data contains just alpha caracters
      * @access protected
@@ -683,8 +689,8 @@ class Data_Validator {
         $clean_input = str_replace(str_split($additional), '', $this->_data['value']);
         return ($clean_input !== $this->_data['value'] && $clean_input === '') || preg_match($string_format, $clean_input);
     }
-    
-    
+
+
     /**
      * Verify if the current data contains just alpha caracters
      * @access public
@@ -692,14 +698,14 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_alpha($additional = ''){
-        $string_format = '/^(\s|[a-zA-Z])*$/';       
+        $string_format = '/^(\s|[a-zA-Z])*$/';
         if(!$this->generic_alpha_num($string_format, $additional)){
             $this->set_error(sprintf($this->_messages['is_alpha'], $this->_data['name']));
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data contains just alpha-numerics caracters
      * @access public
@@ -707,14 +713,14 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_alpha_num($additional = ''){
-        $string_format = '/^(\s|[a-zA-Z0-9])*$/';  
+        $string_format = '/^(\s|[a-zA-Z0-9])*$/';
         if(!$this->generic_alpha_num($string_format, $additional)){
             $this->set_error(sprintf($this->_messages['is_alpha_num'], $this->_data['name']));
         }
         return $this;
     }
-    
-    
+
+
     /**
      * Verify if the current data no contains white spaces
      * @access public
@@ -727,22 +733,77 @@ class Data_Validator {
         }
         return $this;
     }
-    
-    
+
+
+    /**
+     * Verify if the current data is a valid Phone Number (8 or 9 digits)
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_phone(){
+        $verify = preg_match('/^(\(0?\d{2}\)\s?|0?\d{2}[\s.-]?)\d{4,5}[\s.-]?\d{4}$/', $this->_data['value']);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_phone'], $this->_data['name']));
+        }
+        return $this;
+    }
+
+
+    /**
+     * Verify if the current data is a valid License Plate (Brazil)
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_plate(){
+        $verify = preg_match('/^[A-Z]{3}\-[0-9]{4}$/', $this->_data['value']);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_plate'], $this->_data['name']));
+        }
+        return $this;
+    }
+
+
+    /**
+     * Verify if the current data is a valid License Plate (Brazil)
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_ip(){
+        if (filter_var($this->_data['value'], FILTER_VALIDATE_IP) === false) {
+            $this->set_error(sprintf($this->_messages['is_ip'], $this->_data['value']));
+        }
+        return $this;
+    }
+
+
+    /**
+     * Verify if the current data is a valid Zip Code (Brazil)
+     * @access public
+     * @return Data_Validator The self instance
+     */
+    public function is_zipCode(){
+        $verify = preg_match('/^[0-9]{5}-[0-9]{3}$/', $this->_data['value']);
+        if(!$verify){
+            $this->set_error(sprintf($this->_messages['is_zipCode'], $this->_data['name']));
+        }
+        return $this;
+    }
+
+
     /**
      * Validate the data
      * @access public
-     * @return bool The validation of data 
+     * @return bool The validation of data
      */
     public function validate(){
         return (count($this->_errors) > 0 ? false : true);
     }
-    
-    
+
+
     /**
      * The messages of invalid data
      * @param String $param [optional] A specific error
-     * @return Mixed One array with messages or a message of specific error 
+     * @return Mixed One array with messages or a message of specific error
      */
     public function get_errors($param = false){
         if ($param){
@@ -752,7 +813,7 @@ class Data_Validator {
             else{
                 return false;
             }
-        }        
+        }
         return $this->_errors;
     }
 }
