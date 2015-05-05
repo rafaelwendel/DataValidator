@@ -1,11 +1,15 @@
 DataValidator
 ==================
- 
+
 Classe php para validação de dados.
 
 - Fácil utilização "$validate->set('nome', $somename)->is_required()->min_length(5);"
 - Extremamente adaptável
 - Mais de 30 tipos de validações disponíveis
+
+### Créditos
+
+Agradecer ao José Érico (jose.erico.soares@gmail.com) pela contribuição através dos métodos para validar telefone (8 e 9 dígitos), ip, cep(BR) e placa de veículos(BR) 
 
 Instalação
 ------------
@@ -18,7 +22,7 @@ Guia de Utilização
 ### Inclusão
 
 Basta incluir a classe e criar uma instância para utilizá-la.
-    
+
     <?php
         include 'DataValidator.php';
         $validate = new Data_Validator();
@@ -54,7 +58,7 @@ A verificação das validações pode ser feita através da execução do métod
 ### Capturando os erros
 
 Os erros podem ser capturados através da chamada `get_errors()`. Para capturar o(s) erro(s) de um campo específico, basta informar o nome do campo no parâmetro `get_erros($param)`
-    
+
     $validate->set('nome', 'Aa')->min_length(5);
     if ($validate->validate()){
         echo 'Tudo certo';
@@ -68,11 +72,11 @@ Os erros podem ser capturados através da chamada `get_errors()`. Para capturar 
     }
 
 O método `get_errors()` retorna um array encadeado onde o índice é o nome do campo validado e cada posição é um array com cada erro do campo. Ex: Os erros do campo 'nome' e 'email'
-    
+
     $validate->set('nome', '')->is_required()->min_length(5)
              ->set('email', 'something')->is_email();
     print_r($validate->get_errors());
-    
+
     /* Exibe
         Array
         (
@@ -91,13 +95,13 @@ O método `get_errors()` retorna um array encadeado onde o índice é o nome do 
     */
 
 Você pode definir um `pattern` para o índice. Assim é possível definir um prefixo e/ou sufixo padrão para os índices do array de erros
-    
-    //define_pattern($prefix = '', $sufix = '');    
+
+    //define_pattern($prefix = '', $sufix = '');
     $validate->define_pattern('erro_');
     $validate->set('nome', '')->is_required()->min_length(5)
              ->set('email', 'something')->is_email();
     print_r($validate->get_errors());
-    
+
     /* Exibe os erros. Note que os índices estão com o prefixo definido acima
         Array
         (
