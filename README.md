@@ -9,7 +9,7 @@ Classe php para validação de dados.
 
 ### Créditos
 
-Agradecer ao José Érico (jose.erico.soares@gmail.com) pela contribuição através dos métodos para validar telefone (8 e 9 dígitos), ip, cep(BR) e placa de veículos(BR) 
+Agradecer ao José Érico (jose.erico.soares@gmail.com) pela contribuição através dos métodos para validar telefone (8 e 9 dígitos), ip, cep(BR) e placa de veículos(BR)
 
 Instalação
 ------------
@@ -157,6 +157,10 @@ Segue lista de métodos validadores disponíveis na classe DataValidator.
 * is_alpha
 * is_alpha_num
 * no_whitespaces
+* is_phone
+* is_zipCode
+* is_plate
+* is_ip
 
 Se quiser saber o número de métodos validadores disponíveis, execute o método `get_number_validators_methods()`
 
