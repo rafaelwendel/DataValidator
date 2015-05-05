@@ -81,8 +81,8 @@ class Data_Validator {
             'is_alpha'       => 'O campo %s só aceita caracteres alfabéticos',
             'is_alpha_num'   => 'O campo %s só aceita caracteres alfanuméricos',
             'no_whitespaces' => 'O campo %s não aceita espaços em branco',
-            'is_phone'       => 'O campo %s não é válido',
-            'is_zipCode'     => 'O campo %s não é válido',
+            'is_phone'       => 'O campo %s não é um telefone válido',
+            'is_zipCode'     => 'O campo %s não é um CEP válido',
             'is_plate'       => 'O campo $s não é válido',
             'is_ip'          => 'O campo $s não é um ip válido'
         );
@@ -764,7 +764,7 @@ class Data_Validator {
 
 
     /**
-     * Verify if the current data is a valid License Plate (Brazil)
+     * Verify if the current data is a valid IP
      * @access public
      * @return Data_Validator The self instance
      */
