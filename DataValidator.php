@@ -312,7 +312,7 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_num(){
-        if (!is_numeric($this->_data['value'])){
+        if (!is_numeric($this->_data['value']) and $this->_data['value'] != ''){
             $this->set_error(sprintf($this->_messages['is_num'], $this->_data['value']));
         }
         return $this;
