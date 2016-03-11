@@ -6,7 +6,7 @@
  * @version 1.0
  * @link https://github.com/rafaelwendel/DataValidator/
  */
-namespace validator;
+
 
 class Data_Validator {
 
@@ -33,9 +33,10 @@ class Data_Validator {
      * @param $value Mixed The value of data
      * @return Data_Validator The self instance
      */
-    public function set($name, $value){
+    public function set($name, $value, $custom_name = null){
         $this->_data['name'] = $name;
         $this->_data['value'] = $value;
+        $this->_data['custom_name']=  (isset($custom_name)) ? $custom_name : $name;
         return $this;
     }
 
@@ -155,8 +156,9 @@ class Data_Validator {
      * @return Data_Validator The self instance
      */
     public function is_required(){
+        //var_dump($_data);
         if (empty ($this->_data['value'])){
-            $this->set_error(sprintf($this->_messages['is_required'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_required'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -172,7 +174,7 @@ class Data_Validator {
     public function min_length($length, $inclusive = false){
         $verify = ($inclusive === true ? strlen($this->_data['value']) >= $length : strlen($this->_data['value']) > $length);
         if (!$verify){
-            $this->set_error(sprintf($this->_messages['min_length'], $this->_data['name'], $length));
+            $this->set_error(sprintf($this->_messages['min_length'], $this->_data['custom_name'], $length));
         }
         return $this;
     }
@@ -188,7 +190,7 @@ class Data_Validator {
     public function max_length($length, $inclusive = false){
         $verify = ($inclusive === true ? strlen($this->_data['value']) <= $length : strlen($this->_data['value']) < $length);
         if (!$verify){
-            $this->set_error(sprintf($this->_messages['max_length'], $this->_data['name'], $length));
+            $this->set_error(sprintf($this->_messages['max_length'], $this->_data['custom_name'], $length));
         }
         return $this;
     }
@@ -203,7 +205,7 @@ class Data_Validator {
      */
     public function between_length($min, $max){
         if(strlen($this->_data['value']) < $min || strlen($this->_data['value']) > $max){
-            $this->set_error(sprintf($this->_messages['between_length'], $this->_data['name'], $min, $max));
+            $this->set_error(sprintf($this->_messages['between_length'], $this->_data['custom_name'], $min, $max));
         }
         return $this;
     }
@@ -219,7 +221,7 @@ class Data_Validator {
     public function min_value($value, $inclusive = false){
         $verify = ($inclusive === true ? !is_numeric($this->_data['value']) || $this->_data['value'] >= $value : !is_numeric($this->_data['value']) || $this->_data['value'] > $value);
         if (!$verify){
-            $this->set_error(sprintf($this->_messages['min_value'], $this->_data['name'], $value));
+            $this->set_error(sprintf($this->_messages['min_value'], $this->_data['custom_name'], $value));
         }
         return $this;
     }
@@ -235,7 +237,7 @@ class Data_Validator {
     public function max_value($value, $inclusive = false){
         $verify = ($inclusive === true ? !is_numeric($this->_data['value']) || $this->_data['value'] <= $value : !is_numeric($this->_data['value']) || $this->_data['value'] < $value);
         if (!$verify){
-            $this->set_error(sprintf($this->_messages['max_value'], $this->_data['name'], $value));
+            $this->set_error(sprintf($this->_messages['max_value'], $this->_data['custom_name'], $value));
         }
         return $this;
     }
@@ -250,7 +252,7 @@ class Data_Validator {
      */
     public function between_values($min_value, $max_value){
         if(!is_numeric($this->_data['value']) || (($this->_data['value'] < $min_value || $this->_data['value'] > $max_value ))){
-            $this->set_error(sprintf($this->_messages['between_values'], $this->_data['name'], $min_value, $max_value));
+            $this->set_error(sprintf($this->_messages['between_values'], $this->_data['custom_name'], $min_value, $max_value));
         }
         return $this;
     }
@@ -378,7 +380,7 @@ class Data_Validator {
      */
     public function is_obj(){
         if(!is_object($this->_data['value'])){
-            $this->set_error(sprintf($this->_messages['is_obj'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_obj'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -392,7 +394,7 @@ class Data_Validator {
      */
     public function is_instance_of($class){
         if(!($this->_data['value'] instanceof $class)){
-            $this->set_error(sprintf($this->_messages['is_instance_of'], $this->_data['name'], $class));
+            $this->set_error(sprintf($this->_messages['is_instance_of'], $this->_data['custom_name'], $class));
         }
         return $this;
     }
@@ -405,7 +407,7 @@ class Data_Validator {
      */
     public function is_arr(){
         if(!is_array($this->_data['value'])){
-            $this->set_error(sprintf($this->_messages['is_arr'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_arr'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -435,7 +437,7 @@ class Data_Validator {
     public function is_equals($value, $identical = false){
         $verify = ($identical === true ? $this->_data['value'] === $value : strtolower($this->_data['value']) == strtolower($value));
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_equals'], $this->_data['name'], $value));
+            $this->set_error(sprintf($this->_messages['is_equals'], $this->_data['custom_name'], $value));
         }
         return $this;
     }
@@ -451,7 +453,7 @@ class Data_Validator {
     public function is_not_equals($value, $identical = false){
         $verify = ($identical === true ? $this->_data['value'] !== $value : strtolower($this->_data['value']) != strtolower($value));
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_not_equals'], $this->_data['name'], $value));
+            $this->set_error(sprintf($this->_messages['is_not_equals'], $this->_data['custom_name'], $value));
         }
         return $this;
     }
@@ -540,7 +542,7 @@ class Data_Validator {
         }
 
         if(!in_array($this->_data['value'], $values)){
-            $this->set_error(sprintf($this->_messages['contains'], $this->_data['name'], implode(', ', $values)));
+            $this->set_error(sprintf($this->_messages['contains'], $this->_data['custom_name'], implode(', ', $values)));
         }
         return $this;
     }
@@ -564,7 +566,7 @@ class Data_Validator {
         }
 
         if(in_array($this->_data['value'], $values)){
-            $this->set_error(sprintf($this->_messages['not_contains'], $this->_data['name'], implode(', ', $values)));
+            $this->set_error(sprintf($this->_messages['not_contains'], $this->_data['custom_name'], implode(', ', $values)));
         }
         return $this;
     }
@@ -577,7 +579,7 @@ class Data_Validator {
      */
     public function is_lowercase(){
         if($this->_data['value'] !== mb_strtolower($this->_data['value'], mb_detect_encoding($this->_data['value']))){
-            $this->set_error(sprintf($this->_messages['is_lowercase'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_lowercase'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -590,7 +592,7 @@ class Data_Validator {
      */
     public function is_uppercase(){
         if($this->_data['value'] !== mb_strtoupper($this->_data['value'], mb_detect_encoding($this->_data['value']))){
-            $this->set_error(sprintf($this->_messages['is_uppercase'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_uppercase'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -625,7 +627,7 @@ class Data_Validator {
     public function is_positive($inclusive = false){
         $verify = ($inclusive === true ? ($this->_data['value'] >= 0) : ($this->_data['value'] > 0));
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_positive'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_positive'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -640,7 +642,7 @@ class Data_Validator {
     public function is_negative($inclusive = false){
         $verify = ($inclusive === true ? ($this->_data['value'] <= 0) : ($this->_data['value'] < 0));
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_negative'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_negative'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -700,7 +702,7 @@ class Data_Validator {
     public function is_alpha($additional = ''){
         $string_format = '/^(\s|[a-zA-Z])*$/';
         if(!$this->generic_alpha_num($string_format, $additional)){
-            $this->set_error(sprintf($this->_messages['is_alpha'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_alpha'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -715,7 +717,7 @@ class Data_Validator {
     public function is_alpha_num($additional = ''){
         $string_format = '/^(\s|[a-zA-Z0-9])*$/';
         if(!$this->generic_alpha_num($string_format, $additional)){
-            $this->set_error(sprintf($this->_messages['is_alpha_num'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_alpha_num'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -729,7 +731,7 @@ class Data_Validator {
     public function no_whitespaces(){
         $verify = is_null($this->_data['value']) || preg_match('#^\S+$#', $this->_data['value']);
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['no_whitespaces'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['no_whitespaces'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -743,7 +745,7 @@ class Data_Validator {
     public function is_phone(){
         $verify = preg_match('/^(\(0?\d{2}\)\s?|0?\d{2}[\s.-]?)\d{4,5}[\s.-]?\d{4}$/', $this->_data['value']);
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_phone'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_phone'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -757,7 +759,7 @@ class Data_Validator {
     public function is_plate(){
         $verify = preg_match('/^[A-Z]{3}\-[0-9]{4}$/', $this->_data['value']);
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_plate'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_plate'], $this->_data['custom_name']));
         }
         return $this;
     }
@@ -784,7 +786,7 @@ class Data_Validator {
     public function is_zipCode(){
         $verify = preg_match('/^[0-9]{5}-[0-9]{3}$/', $this->_data['value']);
         if(!$verify){
-            $this->set_error(sprintf($this->_messages['is_zipCode'], $this->_data['name']));
+            $this->set_error(sprintf($this->_messages['is_zipCode'], $this->_data['custom_name']));
         }
         return $this;
     }
